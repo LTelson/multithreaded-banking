@@ -1,0 +1,23 @@
+//Compiled object files
+*.0
+
+//Executables
+phase1
+phase2
+phase3
+phase4
+*.out
+
+//Backup files
+*~
+*.bak
+*.swp
+
+//OS generated files
+.DS_Store
+Thumbs.db
+
+//IDE files
+.vscode/
+.idea/
+*.code-workspace
