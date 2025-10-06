@@ -53,3 +53,38 @@ void *transfer(void *arg) {
 
     return NULL;
 }
+
+int main() {
+    // Initialize accounts
+    accounts[0].account_id = 0;
+    accounts[0].balance = 1000;
+    pthread_mutex_init(&accounts[0].lock, NULL);
+
+    accounts[1].account_id = 1;
+    accounts[1].balance = 1000;
+    pthread_mutex_init(&accounts[1].lock, NULL);
+
+    // Setup transfer arguments
+    TransferArgs t1_args = {0, 1, 100};
+    TransferArgs t2_args = {1, 0, 200};
+
+    pthread_t t1, t2;
+
+    // Create threads that will deadlock
+    pthread_create(&t1, NULL, transfer, &t1_args);
+    pthread_create(&t2, NULL, transfer, &t2_args);
+
+    // Join threads (will hang due to deadlock)
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+
+    printf("Final balances:\n");
+    printf("Account 0: %.2f\n", accounts[0].balance);
+    printf("Account 1: %.2f\n", accounts[1].balance);
+
+    // Destroy mutexes
+    pthread_mutex_destroy(&accounts[0].lock);
+    pthread_mutex_destroy(&accounts[1].lock);
+
+    return 0;
+}
