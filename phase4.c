@@ -45,3 +45,27 @@ void *teller_thread(void *arg) {
 
     return NULL;
 }
+// Deadlock-free transfer function using consistent lock ordering
+void *transfer_safe(void *arg) {
+    TransferArgs *args = (TransferArgs *)arg;
+    int from = args->from_id;
+    int to = args->to_id;
+    double amount = args->amount;
+
+    int first = from < to ? from : to;
+    int second = from < to ? to : from;
+
+    pthread_mutex_lock(&accounts[first].lock);
+    pthread_mutex_lock(&accounts[second].lock);
+
+    accounts[from].balance -= amount;
+    accounts[to].balance += amount;
+
+    pthread_mutex_unlock(&accounts[second].lock);
+    pthread_mutex_unlock(&accounts[first].lock);
+
+    printf("Thread %ld: Completed safe transfer from %d to %d amount %.2f\n",
+           pthread_self(), from, to, amount);
+
+    return NULL;
+}
