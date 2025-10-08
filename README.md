@@ -1,7 +1,7 @@
 # Multithreaded Banking System
 
 Phase 1 Approach:
-I decided toopt for relying on three threads and a lower numbers of transactions per teller.
+I decided to opt for relying on three threads and a lower numbers of transactions per teller.
 I wanted to be able to reasonably calculate the expected final balance by hand.
 With the banking scenario, there would be a balance between "enough threads to show a race"
 and "few enough threads to calculate by hand".
