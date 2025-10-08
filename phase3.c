@@ -33,6 +33,7 @@ void *transfer(void *arg) {
 
     // Lock the first account
     pthread_mutex_lock(&accounts[from].lock);
+	usleep(5000); //Increased delay for deadlock to occur reliably
     printf("Thread %ld: Locked account %d\n", pthread_self(), from);
 
     // Simulate processing delay
