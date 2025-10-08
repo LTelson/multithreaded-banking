@@ -32,16 +32,24 @@ void *teller_thread(void *arg) {
 
         if (deposit) {
             printf("Thread %d: Depositing %.2f\n", teller_id, amount);
-            acc->balance += amount;  // RACE CONDITION HERE
+		double temp = acc->balance;
+		usleep(rand() % 10000); //Added 10ms delay to increase chances of race
+		temp += amount;
+		usleep(rand() % 10000);
+            acc->balance = temp;  // RACE CONDITION HERE
         } else {
             printf("Thread %d: Withdrawing %.2f\n", teller_id, amount);
-            acc->balance -= amount;  // RACE CONDITION HERE
+		double temp = acc ->balance;
+		usleep(rand() % 10000);//Added 10ms delay to increase chances of race
+		temp -= amount;
+		usleep(rand() % 10000);
+            acc->balance = temp;  // RACE CONDITION HERE
         }
 
         acc->transaction_count++;
 
         // Sleep a tiny random amount to increase chance of race
-        usleep(rand() % 1000);
+        usleep(rand() % 10000);
     }
 
     return NULL;
@@ -71,6 +79,7 @@ int main() {
         pthread_join(threads[i], NULL);
     }
 
+    printf("Expected transactions count: %d\n", NUM_THREADS * TRANSACTIONS_PER_TELLER);
     printf("Final balance: %.2f\n", accounts[0].balance);
     printf("Total transactions: %d\n", accounts[0].transaction_count);
 
