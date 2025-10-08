@@ -4,8 +4,8 @@
 #include <unistd.h>
 
 #define NUM_ACCOUNTS 2
-#define NUM_THREADS 4
-#define TRANSACTIONS_PER_THREAD 5
+#define NUM_THREADS 100
+#define TRANSACTIONS_PER_THREAD 5//"Per thread" instead of "teller"
 #define INITIAL_BALANCE 1000
 
 // Account structure with mutex
